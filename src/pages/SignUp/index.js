@@ -1,6 +1,8 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef, useState, useContext} from 'react';
+import { AuthContext } from '../../contexts/auth';
 import { Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
 import { Background,
         Container,
         Logo,
@@ -10,17 +12,22 @@ import { Background,
         SubmitText,
         Link,
         LinkText } from '../SignIn/styles';
-
         
 export default function SignUp() {
             
     const emailRef = useRef();
     const passwordRef = useRef();
     const navigation = useNavigation();
+    const { signUp } = useContext(AuthContext);
 
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+
+
+    function handleSignUp(){
+      signUp(nome, email, password);
+    }
 
  return (
    <Background>
@@ -69,7 +76,9 @@ export default function SignUp() {
           />
         </AreaInput>
 
-        <SubmitButton>
+        <SubmitButton
+        onPress={handleSignUp}
+        >
           <SubmitText>Acessar</SubmitText>
         </SubmitButton>
 

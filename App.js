@@ -1,20 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar, StyleSheet, Text } from 'react-native';
+
+import { NavigationContainer } from '@react-navigation/native';
+import 'react-native-gesture-handler';
+import Routes from './src/routes';
+
 import firebase from './src/services/firebaseConnection';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
+    <NavigationContainer>
+      <StatusBar backgroundColor='#131313' barStyle='light-content'/>
+      <Routes />
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

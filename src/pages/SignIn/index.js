@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState, useContext} from 'react';
 import { Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Background, 
@@ -10,14 +10,18 @@ import { Background,
         SubmitText, 
         Link, 
         LinkText } from './styles';
-
+import { AuthContext } from '../../contexts/auth';
         
 export default function SignIn() {
           
+  const passwordRef = useRef();
   const navigation = useNavigation();
+  const { user } = useContext( AuthContext );
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  console.log(user.nome);
 
  return (
    <Background>
@@ -34,6 +38,9 @@ export default function SignIn() {
           autoCorrect={false}
           autoCapitalize='none'
           value={email}
+          returnKeyType='next'
+          onSubmitEditing={ () => passwordRef.current.focus() }
+          blurOnSubmit={false}
           onChangeText={ (texto) => setEmail(texto) }
           />
         </AreaInput>
@@ -44,6 +51,7 @@ export default function SignIn() {
           autoCorrect={false}
           autoCapitalize='none'
           value={password}
+          ref={passwordRef}
           onChangeText={ (texto) => setPassword(texto) }
           />
         </AreaInput>

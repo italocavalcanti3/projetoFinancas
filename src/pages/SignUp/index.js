@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useRef, useState} from 'react';
 import { Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Background,
@@ -14,6 +14,8 @@ import { Background,
         
 export default function SignUp() {
             
+    const emailRef = useRef();
+    const passwordRef = useRef();
     const navigation = useNavigation();
 
     const [nome, setNome] = useState('');
@@ -35,6 +37,9 @@ export default function SignUp() {
           autoCorrect={false}
           autoCapitalize='none'
           value={nome}
+          returnKeyType='next'
+          onSubmitEditing={ () => emailRef.current.focus() }
+          blurOnSubmit={false}
           onChangeText={ (texto) => setNome(texto) }
           />
         </AreaInput>
@@ -45,6 +50,10 @@ export default function SignUp() {
           autoCorrect={false}
           autoCapitalize='none'
           value={email}
+          ref={ emailRef }
+          returnKeyType='next'
+          onSubmitEditing={ () => passwordRef.current.focus() }
+          blurOnSubmit={false}
           onChangeText={ (texto) => setEmail(texto) }
           />
         </AreaInput>
@@ -55,6 +64,7 @@ export default function SignUp() {
           autoCorrect={false}
           autoCapitalize='none'
           value={password}
+          ref={ passwordRef }
           onChangeText={ (texto) => setPassword(texto) }
           />
         </AreaInput>

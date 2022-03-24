@@ -1,5 +1,7 @@
 import React, {useRef, useState, useContext} from 'react';
+import { AuthContext } from '../../contexts/auth';
 import { Platform } from 'react-native';
+import Loading from '../../components/Loading';
 import { useNavigation } from '@react-navigation/native';
 import { Background, 
         Container, 
@@ -10,15 +12,22 @@ import { Background,
         SubmitText, 
         Link, 
         LinkText } from './styles';
-import { AuthContext } from '../../contexts/auth';
         
 export default function SignIn() {
           
   const passwordRef = useRef();
   const navigation = useNavigation();
+  const { signIn } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  function handleSignIn(){
+    setLoading(true);
+    signIn(email, password);
+    setLoading(false);
+  }
 
  return (
    <Background>
@@ -53,7 +62,7 @@ export default function SignIn() {
           />
         </AreaInput>
 
-        <SubmitButton>
+        <SubmitButton onPress={handleSignIn}>
           <SubmitText>Acessar</SubmitText>
         </SubmitButton>
 
@@ -61,6 +70,10 @@ export default function SignIn() {
         onPress={ () => navigation.navigate('SignUp') }>
           <LinkText>Crie uma conta</LinkText>
         </Link>
+
+        {
+          loading ? <Loading /> : null
+        }
 
        </Container>
    </Background>

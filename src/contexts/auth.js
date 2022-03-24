@@ -27,6 +27,7 @@ function AuthProvider({ children }) {
     }
 
     async function signIn(email, password){
+        setLoading(true);
         await firebase.auth().signInWithEmailAndPassword(email, password)
         .then(async (value) => {
             let uid = value.user.uid;
@@ -42,9 +43,11 @@ function AuthProvider({ children }) {
                 storageUser(data);
             });
         }).catch( (error) => console.log(error.code) );
+        setLoading(false);
     }
 
     async function signUp(nome, email, password){
+        setLoading(true);
         await firebase.auth().createUserWithEmailAndPassword(email, password)
         .then(async (value) => {
             let uid = value.user.uid;
@@ -63,10 +66,21 @@ function AuthProvider({ children }) {
             })
             .catch( (error) => console.log(error.code) );
         });
+        setLoading(false);
+    }
+
+    async function signOut(){
+        setLoading(true);
+        await firebase.auth().signOut();
+        await AsyncStorage.clear()
+        .then(() => {
+            setUser(null);
+            setLoading(false);
+        });
     }
 
     return (
-        <AuthContext.Provider value={{ signed: !!user, user, signUp, signIn, loading }}>
+        <AuthContext.Provider value={{ signed: !!user, user, signUp, signIn, signOut, loading }}>
             { children }
         </AuthContext.Provider>
     );

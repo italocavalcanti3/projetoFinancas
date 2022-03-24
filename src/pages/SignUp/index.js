@@ -2,6 +2,7 @@ import React, {useRef, useState, useContext} from 'react';
 import { AuthContext } from '../../contexts/auth';
 import { Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Loading from '../../components/Loading';
 
 import { Background,
         Container,
@@ -18,7 +19,7 @@ export default function SignUp() {
     const emailRef = useRef();
     const passwordRef = useRef();
     const navigation = useNavigation();
-    const { signUp } = useContext(AuthContext);
+    const { signUp, loading } = useContext(AuthContext);
 
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
@@ -29,12 +30,12 @@ export default function SignUp() {
       signUp(nome, email, password);
     }
 
- return (
-   <Background>
-       <Container
-       behavior={Platform.OS === 'ios' ? 'padding' : ''}
-       enabled
-       >
+  return (
+    <Background>
+        <Container
+        behavior={Platform.OS === 'ios' ? 'padding' : ''}
+        enabled
+        >
 
         <Logo source={require('../../assets/Logo.png')} />
 
@@ -87,7 +88,11 @@ export default function SignUp() {
           <LinkText>Crie uma conta</LinkText>
         </Link>
 
-       </Container>
-   </Background>
+        {
+          loading ? <Loading /> : null
+        }
+        
+        </Container>
+    </Background>
   );
 }

@@ -17,16 +17,13 @@ export default function SignIn() {
           
   const passwordRef = useRef();
   const navigation = useNavigation();
-  const { signIn } = useContext(AuthContext);
-  const [loading, setLoading] = useState(false);
+  const { signIn, loading} = useContext(AuthContext);
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   function handleSignIn(){
-    setLoading(true);
     signIn(email, password);
-    setLoading(false);
   }
 
  return (
@@ -74,7 +71,7 @@ export default function SignIn() {
         {
           loading ? <Loading /> : null
         }
-
+        
        </Container>
    </Background>
   );

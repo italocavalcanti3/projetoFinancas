@@ -1,12 +1,15 @@
 import React, { createContext, useState, useEffect } from "react";
 import firebase from '../services/firebaseConnection';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 export const AuthContext = createContext({});
 
 function AuthProvider({ children }) {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+
+    const navigation = useNavigation();
 
     useEffect(() => {
         async function loadingStorage(){
@@ -24,6 +27,12 @@ function AuthProvider({ children }) {
 
     async function storageUser(data){
         await AsyncStorage.setItem('Auth_user', JSON.stringify(data));
+    }
+
+    function handleNavigation(route) {
+        setLoading(true);
+        navigation.navigate(`${route}`);
+        setLoading(false);
     }
 
     async function signIn(email, password){
@@ -80,7 +89,7 @@ function AuthProvider({ children }) {
     }
 
     return (
-        <AuthContext.Provider value={{ signed: !!user, user, signUp, signIn, signOut, loading }}>
+        <AuthContext.Provider value={{ signed: !!user, user, signUp, signIn, signOut, loading, handleNavigation }}>
             { children }
         </AuthContext.Provider>
     );

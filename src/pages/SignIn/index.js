@@ -54,6 +54,7 @@ export default function SignIn() {
           autoCorrect={false}
           autoCapitalize='none'
           value={password}
+          secureTextEntry={true}
           ref={passwordRef}
           onChangeText={ (texto) => setPassword(texto) }
           />

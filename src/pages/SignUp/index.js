@@ -1,6 +1,6 @@
 import React, {useRef, useState, useContext} from 'react';
 import { AuthContext } from '../../contexts/auth';
-import { Platform } from 'react-native';
+import { Platform, TextInput } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Loading from '../../components/Loading';
 
@@ -72,6 +72,7 @@ export default function SignUp() {
           autoCorrect={false}
           autoCapitalize='none'
           value={password}
+          secureTextEntry={true}
           ref={ passwordRef }
           onChangeText={ (texto) => setPassword(texto) }
           />
@@ -85,7 +86,7 @@ export default function SignUp() {
 
         <Link
         onPress={ () => navigation.navigate('SignIn') }>
-          <LinkText>Crie uma conta</LinkText>
+          <LinkText>Já tenho uma conta</LinkText>
         </Link>
 
         {

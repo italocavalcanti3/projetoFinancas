@@ -1,18 +1,22 @@
 import React, { useContext, useEffect, useState } from 'react';
+import { Alert, TouchableOpacity } from 'react-native';
 import { AuthContext } from '../../contexts/auth';
 import Header from '../../components/Header';
-import { Background, Container, Nome, Saldo, Title, Lista } from './style';
+import { Background, Container, Nome, Saldo, Title, Lista, Area } from './style';
 import HistoricoList from '../../components/HistoricoList';
 import firebase from '../../services/firebaseConnection';
-import { format, isBefore } from 'date-fns';
 import Loading from '../../components/Loading';
-import { Alert } from 'react-native';
+import { format, isBefore } from 'date-fns';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import DatePicker from '../../components/DatePicker';
 
 export default function Home() {
   const { user } = useContext(AuthContext);
   const [historico, setHistorico] = useState([]);
   const [saldo, setSaldo] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [newDate, setNewDate] = useState(new Date());
+  const [show, setShow] = useState(false);
 
   useEffect(() => {
 
@@ -23,7 +27,7 @@ export default function Home() {
 
       await firebase.database().ref('historico')
       .child(user.uid)
-      .orderByChild('date').equalTo(format(new Date, 'dd/MM/yyyy'))
+      .orderByChild('date').equalTo(format(newDate, 'dd/MM/yyyy'))
       .limitToLast(10)
       .on('value', (snapshot) => {
         
@@ -44,7 +48,7 @@ export default function Home() {
 
     loadList();
 
-  }, []);
+  }, [newDate]);
 
   function handleDelete(data){
     const [diaItem, mesItem, anoItem] = data.date.split('/');
@@ -91,6 +95,19 @@ export default function Home() {
     setLoading(false);
   }
 
+  function handleShowPicker(){
+    setShow(true);
+  }
+
+  function handleClose(){
+    setShow(false);
+  }
+
+  const onChange = (date) => {
+    setShow(Platform.OS === 'ios');
+    setNewDate(date);
+  }
+
   if (loading) {
     return <Loading />
   }
@@ -103,13 +120,27 @@ export default function Home() {
         <Saldo>R$ { saldo.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') }</Saldo>
       </Container>
 
+      <Area>
+      <TouchableOpacity onPress={handleShowPicker}>
+        <Icon name='event' color="#FFF" size={30} />
+      </TouchableOpacity>
       <Title>Últimas movimentações</Title>
+      </Area>
       <Lista 
       keyExtractor={ item => item.key }
       showsVerticalScrollIndicator={false}
       data={historico}
       renderItem={ ({ item }) => ( <HistoricoList data={item} deteleItem={handleDelete} /> )}
       />
+
+      {
+        show && (
+          <DatePicker
+          onClose={handleClose}
+          onChange={onChange}
+          date={newDate}
+          />
+      )}
     </Background>
   );
 }

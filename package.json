@@ -30,7 +30,8 @@
     "react-native-web": "0.17.1",
     "styled-components": "^4.4.1",
     "styled-components-native": "^1.0.2",
-    "watchman": "^1.0.0"
+    "watchman": "^1.0.0",
+    "@react-native-community/datetimepicker": "4.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
